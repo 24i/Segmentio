@@ -468,8 +468,19 @@ open class Segmentio: UIView {
             let maxVisibleItems = segmentioOptions.maxVisibleItems > segmentioItems.count ? CGFloat(segmentioItems.count) : CGFloat(segmentioOptions.maxVisibleItems)
             cellWidth = floor(collectionViewWidth / maxVisibleItems)
             
+            
+            var xValue = floor(CGFloat(selectedSegmentioIndex) * cellWidth - collectionView.contentOffset.x)
+
+            //RTL support
+            if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
+                if xValue.isFinite{
+                    //Getting the oposite x place
+                    xValue = collectionViewWidth - (xValue + cellWidth)
+                }
+            }
+            
             cellRect = CGRect(
-                x: floor(CGFloat(selectedSegmentioIndex) * cellWidth - collectionView.contentOffset.x),
+                x: xValue,
                 y: 0,
                 width: floor(collectionViewWidth / maxVisibleItems),
                 height: collectionView.frame.height
