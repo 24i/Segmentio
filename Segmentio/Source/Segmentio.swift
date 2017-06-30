@@ -39,7 +39,14 @@ open class Segmentio: UIView {
         didSet {
             if selectedSegmentioIndex != oldValue {
                 reloadSegmentio()
-                valueDidChange?(self, selectedSegmentioIndex)
+
+                //RTL support
+                if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
+                    selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
+                }else{
+                    valueDidChange?(self, selectedSegmentioIndex)
+                }
+
             }
         }
     }
@@ -468,19 +475,8 @@ open class Segmentio: UIView {
             let maxVisibleItems = segmentioOptions.maxVisibleItems > segmentioItems.count ? CGFloat(segmentioItems.count) : CGFloat(segmentioOptions.maxVisibleItems)
             cellWidth = floor(collectionViewWidth / maxVisibleItems)
             
-            
-            var xValue = floor(CGFloat(selectedSegmentioIndex) * cellWidth - collectionView.contentOffset.x)
-
-            //RTL support
-            if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
-                if xValue.isFinite{
-                    //Getting the oposite x place
-                    xValue = collectionViewWidth - (xValue + cellWidth)
-                }
-            }
-            
             cellRect = CGRect(
-                x: xValue,
+                x: floor(CGFloat(selectedSegmentioIndex) * cellWidth - collectionView.contentOffset.x),
                 y: 0,
                 width: floor(collectionViewWidth / maxVisibleItems),
                 height: collectionView.frame.height
@@ -570,7 +566,12 @@ extension Segmentio: UICollectionViewDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedSegmentioIndex = indexPath.row
+        //RTL support
+        if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
+            selectedSegmentioIndex = collectionView.numberOfItems(inSection: 0) - 1 - indexPath.row
+        }else{
+            selectedSegmentioIndex = indexPath.row
+        }
     }
     
 }
