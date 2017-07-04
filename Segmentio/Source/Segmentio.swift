@@ -43,9 +43,9 @@ open class Segmentio: UIView {
                 //RTL support
                 if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
                     selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
-                }else{
-                    valueDidChange?(self, selectedSegmentioIndex)
                 }
+                
+                valueDidChange?(self, selectedSegmentioIndex)
 
             }
         }
