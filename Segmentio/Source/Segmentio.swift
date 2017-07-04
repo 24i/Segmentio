@@ -38,14 +38,14 @@ open class Segmentio: UIView {
     open var selectedSegmentioIndex = -1 {
         didSet {
             //RTL support
-            if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
-                selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
-            }
-            
-            
-            if selectedSegmentioIndex != oldValue {
+            if selectedSegmentioIndex != oldValue || UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft{
                 reloadSegmentio()
-    
+          
+                if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
+                    selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
+                }
+                
+                
                 valueDidChange?(self, selectedSegmentioIndex)
 
             }
