@@ -37,14 +37,15 @@ open class Segmentio: UIView {
     open var valueDidChange: SegmentioSelectionCallback?
     open var selectedSegmentioIndex = -1 {
         didSet {
+            //RTL support
+            if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
+                selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
+            }
+            
+            
             if selectedSegmentioIndex != oldValue {
                 reloadSegmentio()
-
-                //RTL support
-                if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
-                    selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
-                }
-                
+    
                 valueDidChange?(self, selectedSegmentioIndex)
 
             }
