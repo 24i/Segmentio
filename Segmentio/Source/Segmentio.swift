@@ -37,21 +37,15 @@ open class Segmentio: UIView {
     open var valueDidChange: SegmentioSelectionCallback?
     open var selectedSegmentioIndex = -1 {
         didSet {
-            //RTL support
-            if selectedSegmentioIndex != oldValue || UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft{
-                reloadSegmentio()
-          
-                if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
-                    selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
-                }
-                
-                
-                valueDidChange?(self, selectedSegmentioIndex)
-
-            }
+            reloadSegmentio()
+            // count for RTL
+            selectedSegmentioIndex = segmentioCollectionView!.numberOfItems(inSection: 0) - 1 - selectedSegmentioIndex
+            
+            
+            valueDidChange?(self, selectedSegmentioIndex)
         }
     }
-
+    
     open fileprivate(set) var segmentioItems = [SegmentioItem]()
     fileprivate var segmentioCollectionView: UICollectionView?
     fileprivate var segmentioOptions = SegmentioOptions()
@@ -319,7 +313,7 @@ open class Segmentio: UIView {
     }
     
     // MARK: CAShapeLayers setup
-
+    
     fileprivate func setupShapeLayer(shapeLayer: CAShapeLayer, backgroundColor: UIColor, height: CGFloat, sublayer: CALayer) {
         shapeLayer.fillColor = backgroundColor.cgColor
         shapeLayer.strokeColor = backgroundColor.cgColor
@@ -335,7 +329,7 @@ open class Segmentio: UIView {
         scrollToItemAtContext()
         moveShapeLayerAtContext()
     }
-
+    
     // MARK: Move shape layer to item
     
     fileprivate func moveShapeLayerAtContext() {
@@ -567,12 +561,8 @@ extension Segmentio: UICollectionViewDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //RTL support
-        if UIApplication.shared.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirection.rightToLeft {
-            selectedSegmentioIndex = collectionView.numberOfItems(inSection: 0) - 1 - indexPath.row
-        }else{
-            selectedSegmentioIndex = indexPath.row
-        }
+        // count for RTL
+        selectedSegmentioIndex = collectionView.numberOfItems(inSection: 0) - 1 - indexPath.row
     }
     
 }
@@ -591,7 +581,7 @@ extension Segmentio: UICollectionViewDelegateFlowLayout {
 // MARK: - UIScrollViewDelegate
 
 extension Segmentio: UIScrollViewDelegate {
-
+    
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if isPerformingScrollAnimation {
             return
@@ -659,3 +649,4 @@ extension Segmentio.Points {
     }
     
 }
+
